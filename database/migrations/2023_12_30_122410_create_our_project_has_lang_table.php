@@ -13,11 +13,15 @@ class CreateOurProjectHasLangTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('our_project_has_lang')) {
+            return;
+        }
+
         Schema::create('our_project_has_lang', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Lang::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\OurProject::class)->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->timestamps();
+            $table->integer('lang_id');
+            $table->foreignId('our_project_id')->constrained('our_projects')->cascadeOnDelete();
+            $table->string('our_project_name');
+            $table->primary(['lang_id', 'our_project_id']);
         });
     }
 
@@ -28,6 +32,6 @@ class CreateOurProjectHasLangTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('our_project_has_lang');
+        // The production dump already contains this table; rollback must preserve its data.
     }
 }

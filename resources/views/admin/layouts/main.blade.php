@@ -48,8 +48,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <!--end::Layout Skins -->
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-{{--    <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />--}}
     <link href="{{ '/css/main.css' }}" type="text/css" rel="stylesheet" />
+    @vite('resources/js/app.js')
 </head>
 
 <!-- end::Head -->
@@ -140,7 +140,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <!--begin::Page Scripts(used by this page) -->
 <script src="/assets/js/pages/dashboard.js" type="text/javascript"></script>
-<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
 <!--end::Page Scripts -->
 </body>
 

@@ -16,7 +16,6 @@ use App\Models\Translate;
 use App\Models\TranslateLang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
 
 class ParametersController extends Controller
 {

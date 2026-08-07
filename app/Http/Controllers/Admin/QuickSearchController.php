@@ -13,7 +13,6 @@ use App\Models\QuickSearch;
 use App\Models\QuickSearchLang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
 
 class QuickSearchController extends Controller
 {

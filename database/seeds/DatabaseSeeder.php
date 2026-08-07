@@ -1,6 +1,5 @@
 <?php
 
-use App\Product;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,7 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
-        $this->call(ProductsTableSeeder::class);
+        // Production content is restored from the database dump.
     }
 }

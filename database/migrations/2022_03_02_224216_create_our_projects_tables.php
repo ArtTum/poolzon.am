@@ -13,7 +13,7 @@ class CreateOurProjectsTables extends Migration
      */
     public function up()
     {
-        Schema::create('our_projects_tables', function (Blueprint $table) {
+        Schema::create('our_projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('image');
@@ -28,6 +28,6 @@ class CreateOurProjectsTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('our_projects_tables');
+        Schema::dropIfExists('our_projects');
     }
 }

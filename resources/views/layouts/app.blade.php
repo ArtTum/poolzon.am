@@ -46,7 +46,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <!--end::Layout Skins -->
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-    <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
 <!-- end::Head -->

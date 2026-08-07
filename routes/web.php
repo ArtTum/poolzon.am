@@ -152,8 +152,8 @@ Route::get('/simple', function () {
     return view('pages.simple');
 });
 
-Route::prefix('/{locale?}')->group(function () {
-    Route::get('//catalog/1712', 'Index\ProductsController@ourProjects');
+Route::prefix('/{locale?}')->name('localized.')->group(function () {
+    Route::get('/catalog/1712', 'Index\ProductsController@ourProjects');
     Route::get('/cart', 'CartController@cart')->where('locale', 'ru')->name('cart.index');
     Route::get('/order-info', 'CartController@orderInfo')->where('locale', 'ru')->name('cart.orderInfo');
     Route::get('/step-one', 'CartController@stepOne')->where('locale', 'ru')->name('cart.stepOne');

@@ -65,7 +65,7 @@
 
 <script>
     import {mapGetters} from "vuex";
-    import ClipLoader from "vue-spinner/src/ClipLoader";
+    import ClipLoader from "vue-spinner/src/ClipLoader.vue";
 
     export default {
 

@@ -4,6 +4,7 @@ namespace App\Http\Helpers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
 
 
@@ -116,30 +117,19 @@ class Helper
      */
     public function recaptchaCheck($response)
     {
-        $parameters = http_build_query([
-            'secret'   => value(env('RECAPTCHA_SECRET')),
-            'response' => $response,
-        ]);
-        $url = 'https://www.google.com/recaptcha/api/siteverify?' . $parameters;
-        $checkResponse = null;
-
-        // prefer curl, but fall back to file_get_contents
-        if (function_exists('curl_version')) {
-            $curl = curl_init($url);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 1);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            $checkResponse = curl_exec($curl);
-        } else {
-            $checkResponse = file_get_contents($url);
-        }
-        if (is_null($checkResponse) || empty( $checkResponse )) {
+        if (blank(config('services.recaptcha.secret')) || blank($response)) {
             return false;
         }
-        $decodedResponse = json_decode($checkResponse, true);
 
-        return $decodedResponse['success'];
+        $checkResponse = Http::asForm()->timeout(3)->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $response,
+            ]
+        );
+
+        return $checkResponse->successful() && $checkResponse->json('success') === true;
     }
 
     /**

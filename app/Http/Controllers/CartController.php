@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -200,6 +201,11 @@ class CartController extends Controller
     {
         App::setLocale($lang);
 
+        if ($request->input('payment_type', 'default') !== 'default') {
+            return redirect(Helper::lang('step-three'))
+                ->withErrors(['payment_type' => 'Online payment is temporarily unavailable.']);
+        }
+
         $session1 = $request->session()->get('one');
         $session2 = $request->session()->get('two');
         $cartCollection = Cart::getContent();
@@ -220,79 +226,32 @@ class CartController extends Controller
             'intercom' => $session2['intercom'],
             'comment' => $session2['comment'],
             'products' => $products,
-            'status' => 'Padding',
+            'status' => 'Pending',
             'total_count' => Cart::getTotalQuantity(),
             'total_price' => Cart::getTotal(),
         ]);
 
-        if ($request->payment_type == 'online') {
+        $order->status = 'Success';
+        $order->type = 2;
+        $order->save();
 
-//            $ClientID = 'bd5cf7ea-5bf9-4b67-99ee-4b50432147fb';
-//            $username = '19536356_api';
-//            $password = 'mC7jW7uB6pD9tF9d';
-//            $backURL = 'https://vagart.am/api/res';
-//            $url = 'https://services.ameriabank.am/VPOS/api/VPOS/InitPayment';
-//
-//            $order->type = 1;
-//            $order->save();
-//
-//            $price = $order->total_price + 3900;
-//
-//            $data = [
-//                "ClientID" => $ClientID,
-//                "Amount" => $price,
-//                "OrderID" => $order->id,
-//                "BackURL" => $backURL,
-//                "Username" => $username,
-//                "Password" => $password,
-//                "Description" => 'Poolzone.am Product(s)',
-//                "Currency" => "051",
-//            ];
-//
-//            $data_string = json_encode($data);
-//
-//            $ch = curl_init($url);
-//            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-//            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-//            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-//                    'Content-Type: application/json',
-//                    'Content-Length: ' . strlen($data_string))
-//            );
-//
-//            $result = json_decode(curl_exec($ch));
-//
-//            if ($result->ResponseCode == '1' && $result->ResponseMessage == 'OK') {
-//                echo "<script type='text/javascript'>\n";
-//                echo "window.location.replace('https://services.ameriabank.am/VPOS/Payments/Pay?id=" . $result->PaymentID . "&lang=am');";
-//                echo "</script>";
-//            } else {
-//                echo $result->ResponseMessage;
-//                die;
-//            }
-        } else {
-            $order->status = 'Success';
-            $order->type = 2;
-            $order->save();
+        Mail::send('mail.order', [
+            'order' => $order,
+        ], function ($message) use ($order) {
+            $message->to($order->email, 'poolzon.am order ' . $order->id)
+                ->subject('poolzon.am order ' . $order->id);
+            $message->from('info@vagart.am', 'poolzon.am');
+        });
 
-            Mail::send('mail.order', [
-                'order' => $order,
-            ], function ($message) use ($order) {
-                $message->to($order->email, 'poolzon.am order ' . $order->id)
-                    ->subject('poolzon.am order ' . $order->id);
-                $message->from('info@vagart.am', 'poolzon.am');
-            });
+        Mail::send('mail.order', [
+            'order' => $order,
+        ], function ($message) use ($order) {
+            $message->to('info@vagart.am', 'poolzon.am order ' . $order->id)
+                ->subject('poolzon.am order ' . $order->id);
+            $message->from('info@vagart.am', 'poolzon.am');
+        });
 
-            Mail::send('mail.order', [
-                'order' => $order,
-            ], function ($message) use ($order) {
-                $message->to('info@vagart.am', 'poolzon.am order ' . $order->id)
-                    ->subject('poolzon.am order ' . $order->id);
-                $message->from('info@vagart.am', 'poolzon.am');
-            });
-            return redirect(Helper::lang('order-info') . '?order=' . $order->id);
-        }
+        return redirect(Helper::lang('order-info') . '?order=' . $order->id);
     }
 
     /**
@@ -303,37 +262,27 @@ class CartController extends Controller
     public function res(Request $request)
     {
         App::setLocale('am');
-        $id = $request->get('orderID');
-        $orderID = substr($id, -2);
+        $id = $request->integer('orderID');
         $payment_id = $request->get('paymentID');
-        $resposneCode = $request->resposneCode;
-        $username = '19536356_api';
-        $password = 'mC7jW7uB6pD9tF9d';
-        $url = 'https://services.ameriabank.am/VPOS/api/VPOS/GetPaymentDetails';
-        $order = Order::find($id);
+        $responseCode = $request->input('responseCode', $request->input('resposneCode'));
+        $username = config('services.ameriabank.username');
+        $password = config('services.ameriabank.password');
+        $url = config('services.ameriabank.details_url');
+        $order = Order::findOrFail($id);
 
-        if ($resposneCode == '00') {
+        abort_if(blank($username) || blank($password), 503, 'Payment gateway is not configured.');
+
+        if ($responseCode === '00') {
             $data = [
                 "PaymentID" => $payment_id,
                 "Username" => $username,
                 "Password" => $password,
             ];
 
-            $data_string = json_encode($data);
+            $response = Http::asJson()->timeout(15)->post($url, $data);
+            $result = $response->object();
 
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data_string)
-            ]);
-
-            $result = json_decode(curl_exec($ch));
-
-            if ($result->ResponseCode == '00') {
+            if ($response->successful() && ($result->ResponseCode ?? null) === '00') {
                 $order->status = 'Success';
                 $order->type = 1;
                 $order->payment_id = $payment_id;
@@ -357,13 +306,20 @@ class CartController extends Controller
                 return redirect(Helper::lang('order-info') . '?order=' . $order->id . '&paymentid=' . $payment_id);
 
             } else {
-                die('error');
+                $order->status = 'Error';
+                $order->type = 1;
+                $order->error = $result->ResponseMessage ?? 'Payment verification failed.';
+                $order->save();
+
+                abort(502, 'Payment verification failed.');
             }
         } else {
             $order->status = 'Error';
             $order->type = 1;
+            $order->error = 'Payment gateway response code: ' . ($responseCode ?? 'missing');
             $order->save();
-            dd($request->all());
+
+            return redirect(Helper::lang('order-info') . '?order=' . $order->id);
         }
     }
 }

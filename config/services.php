@@ -30,4 +30,29 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ameriabank' => [
+        'client_id' => env('AMERIABANK_CLIENT_ID'),
+        'username' => env('AMERIABANK_USERNAME'),
+        'password' => env('AMERIABANK_PASSWORD'),
+        'init_url' => env(
+            'AMERIABANK_INIT_URL',
+            'https://services.ameriabank.am/VPOS/api/VPOS/InitPayment'
+        ),
+        'details_url' => env(
+            'AMERIABANK_DETAILS_URL',
+            'https://services.ameriabank.am/VPOS/api/VPOS/GetPaymentDetails'
+        ),
+        'payment_url' => env(
+            'AMERIABANK_PAYMENT_URL',
+            'https://services.ameriabank.am/VPOS/Payments/Pay'
+        ),
+        'callback_url' => env('AMERIABANK_CALLBACK_URL'),
+        'currency' => env('AMERIABANK_CURRENCY', '051'),
+        'description' => env('AMERIABANK_DESCRIPTION', 'Poolzone.am Product(s)'),
+    ],
+
+    'recaptcha' => [
+        'secret' => env('RECAPTCHA_SECRET'),
+    ],
+
 ];
