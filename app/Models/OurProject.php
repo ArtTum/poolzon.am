@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class OurProject extends Model
+{
+    protected $table = 'our_projects';
+    protected $fillable = [
+        'id',
+        'title',
+        'image',
+    ];
+
+    public function lang()
+    {
+        return $this->hasMany(OurProjectLang::class, 'our_project_id', 'id');
+    }
+}

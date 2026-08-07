@@ -1,0 +1,38 @@
+.path-list {
+  &__item {
+    font-size: 14px;
+
+    &:after {
+      content: '\e905';
+      color: $tertiary;
+      font-family: icomoon;
+      font-size: 8px;
+      margin: 0 5px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    &:last-child {
+      &:after {
+        content: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .path-list {
+    &__item {
+      font-size: 13px;
+      line-height: 18px;
+    }
+  }
+}
+
+@media (max-width: 540px) {
+  .path-list {
+    &__item {
+      font-size: 12px;
+    }
+  }
+}

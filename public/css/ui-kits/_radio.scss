@@ -1,0 +1,38 @@
+.def-radio {
+  $this: &;
+
+  cursor: pointer;
+
+  span {
+    display: block;
+  }
+
+  &__text {
+    font-size: 14px;
+    padding-left: 10px;
+    max-width: 75%;
+    max-width: calc(100% - 18px);
+    max-width: -webkit-calc(100% - 18px);
+    max-width: -moz-calc(100% - 18px);
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  input[type="radio"] + span {
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    background-color: $white;
+    background-clip: content-box;
+    border: 1px solid rgba($black, 0.08);
+    @include border-radius(50%);
+    @include transition(background-color 0.3s);
+  }
+
+  input[type="radio"]:checked + span {
+    border-color: $primary;
+    background-color: $primary;
+  }
+}

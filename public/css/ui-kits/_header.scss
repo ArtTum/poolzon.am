@@ -1,0 +1,248 @@
+.header {
+  height: 94px;
+  position: fixed;
+  width: 100%;
+  background-color: $white;
+  z-index: 9;
+  top: 0;
+  @include box-shadow(0px 1px 3px rgba(0, 0, 0, 0.15));
+
+  &__inner {
+    height: 100%;
+  }
+
+  &__bg {
+    height: 100%;
+    background-color: $white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10;
+  }
+
+  &__center {
+    padding: 0 30px 0 50px;
+  }
+
+  .cart-button {
+    position: relative;
+
+    &__count {
+      display: block;
+      width: 15px;
+      height: 15px;
+      text-align: center;
+      line-height: 15px;
+      font-size: 8px;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      color: $white;
+      background-color: $pink;
+      @include border-radius(50%);
+    }
+  }
+
+  &__language {
+    .language-box {
+      &__list {
+        position: absolute;
+        top: 46px;
+        z-index: 9;
+        display: none;
+        overflow: hidden;
+        background-color: $white;
+        @include box-shadow(0 2px 4px 0 rgba(0,0,0,0.1));
+      }
+    }
+  }
+}
+
+.logo {
+  height: 40px;
+  line-height: 0;
+
+  a {
+    &:hover{
+      text-decoration: none;
+    }
+  }
+
+  img {
+    max-height: 100%;
+    min-height: 100%;
+  }
+}
+
+.language-box {
+  $this: &;
+
+  font-size: 12px;
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.opened {
+    #{$this}__selected-item {
+        color: $white;
+        background-color: $secondary;
+    }
+  }
+
+  &__selected-item, &__item {
+    width: 44px;
+    height: 44px;
+    display: block;
+    line-height: 44px;
+    text-align: center;
+  }
+
+  &__selected-item {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -webkit-tap-highlight-color: transparent;
+    width: 44px;
+    height: 44px;
+    line-height: 46px;
+    color: $secondary;
+    background-color: rgba($secondary, 0.06);
+    @include border-radius(4px);
+
+    &:hover {
+      color: $white;
+      background-color: $secondary;
+    }
+  }
+
+  &__list {
+    @include border-radius(4px);
+  }
+
+  &__item {
+    color: $secondary;
+    margin-left: 0;
+    @include transition(background-color 0.3s, color 0.3s);
+
+    &:first-child {
+      @include border-radius(4px 4px 0 0);
+    }
+
+    &:last-child {
+      @include border-radius(0 0 4px 4px);
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba($tertiary, 0.1);
+    }
+
+    &.active {
+      color: $white;
+      background-color: $primary;
+
+      &:hover {
+        cursor: default;
+        color: $white;
+        background-color: $primary;
+      }
+    }
+  }
+}
+
+@media (min-width: 993px) {
+  .header {
+    &__search {
+      margin-left: 18px;
+
+      button {
+        width: initial;
+        color: $white;
+        background-color: $primary;
+        padding: 0 30px;
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    height: 60px;
+
+    &__nav {
+      font-size: 18px !important;
+    }
+
+    &__center  {
+      padding: 0;
+      @include justify-content(flex-end !important);
+    }
+
+    &__search {
+      flex: initial;
+      margin-right: 5px;
+
+      button {
+        @include border-radius(4px !important);
+      }
+    }
+  }
+
+  .search-box {
+    &__input {
+      padding: 20px 2.5%;
+      position: fixed;
+      width: 100%;
+      background-color: $bg;
+      z-index: 8;
+      right: -100%;
+      top: 60px;
+      @include box-shadow(0px 2px 3px rgba(0, 0, 0, 0.15));
+      @include transition(right 0.3s linear);
+
+      &.show {
+        right: 0;
+        @include transition(right 0.3s linear);
+      }
+
+      input {
+        border-right-width: 1px !important;
+        @include border-radius(4px !important);
+      }
+    }
+  }
+
+  .language-box {
+    &__selected-item, &__item {
+      width: 36px;
+      height: 36px;
+      display: block;
+      line-height: 36px;
+      text-align: center;
+    }
+
+    &__selected-item {
+      width: 36px;
+      height: 36px;
+      line-height: 38px;
+    }
+
+    &__list {
+      top: 38px;
+    }
+  }
+
+  .logo {
+    height: 32px;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 540px) {
+  .logo {
+    height: 26px;
+  }
+}

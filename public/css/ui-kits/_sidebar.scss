@@ -1,0 +1,43 @@
+.sidebar {
+  padding-right: 10px;
+}
+
+.price-box {
+  &__slider {
+    width: 100%;
+  }
+
+  .ui-slider  {
+    cursor: pointer;
+
+    .ui-slider-handle {
+      width: 12px;
+      height: 12px;
+      top: -0.26em;
+      cursor: pointer;
+      background-color: $white;
+      border-color: $primary;
+      @include border-radius(50%);
+    }
+
+    >div, >span {
+      &:nth-child(2) {
+        margin-left: -.2em !important;
+      }
+    }
+  }
+
+  .ui-slider-horizontal {
+    height: .5em;
+  }
+
+  .ui-widget-content {
+    border-color: rgba($tertiary, 0.4) !important;
+  }
+
+  .ui-widget-header {
+    background: $primary;
+  }
+}
+
+

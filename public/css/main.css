@@ -1,0 +1,64 @@
+.min-height {
+    min-height: calc(100vh - 180px);
+}
+
+.sorting_1 i {
+    font-size: 20px;
+    cursor: grab;
+}
+
+.am label {
+    color: #f97709;
+}
+
+.ru label {
+    color: blue;
+}
+
+.en label {
+    color: green
+}
+
+.kt-avatar .kt-avatar__holder {
+    width: 200px;
+    height: 200px;
+    border-radius: 3px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.kt-menu__item .router-link-active {
+    -webkit-transition: background-color .3s;
+    transition: background-color .3s;
+    background-color: #1b1b28;
+    color: white;
+}
+
+.kt-menu__item .router-link-active .kt-menu__link-text {
+    color: white !important;
+}
+
+.kt-menu__item .router-link-active .kt-svg-icon g [fill] {
+    fill: #5d78ff !important;
+}
+
+.validated .select2-container--default .select2-selection--multiple, .validated .select2-container--default .select2-selection--single {
+    border: 1px solid #fd397a;
+}
+
+select {
+    width: 100%
+}
+
+.validated .msl-searchable-list__items {
+    border: 1px solid #fd397a;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    border-color: #fd397a;
+    padding-right: calc(1.5em + 1.3rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23fd397a' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23fd397a' stroke='none'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .325rem) center;
+    background-size: calc(.75em + .65rem) calc(.75em + .65rem);
+}

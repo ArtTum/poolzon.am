@@ -1,0 +1,124 @@
+.navigation {
+  position: fixed;
+  width: 100%;
+  background-color: $bg;
+  z-index: 8;
+  left: 0;
+  top: -100%;
+  @include box-shadow(0px 2px 3px rgba(0, 0, 0, 0.15));
+  @include transition(top 0.5s linear);
+
+  &.show {
+    top: 94px;
+    @include transition(top 0.4s linear);
+  }
+
+  &__scroll {
+    height: 100%;
+    padding: 40px 0;
+  }
+
+  &__close {
+    font-size: 16px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: $secondary;
+    display: none;
+    line-height: 0;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+  }
+
+  &__col {
+    padding-right: 30px;
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  &__banner {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .navigation {
+    left: -100%;
+    top: 60px;
+    padding: 0;
+    height: calc(100% - 60px);
+    height: -webkit-calc(100% - 60px);
+    height: -moz-calc(100% - 60px);
+    @include transition(left 0.5s linear);
+
+    &__col {
+      flex: 50%;
+      margin-bottom: 30px;
+
+      &:nth-child(2n) {
+        padding-right: 0;
+      }
+    }
+
+    &__scroll {
+      padding: 30px 0 0;
+    }
+
+    &.show {
+      left: 0;
+      top: 60px;
+      @include transition(left 0.4s linear);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    &__col {
+      flex: 100%;
+      padding-right: 0 !important;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 540px) {
+  .navigation {
+    &__scroll {
+      height: calc(100% - 56px);
+      height: -webkit-calc(100% - 56px);
+      height: -moz-calc(100% - 56px);
+    }
+
+    &__language {
+      padding: 10px 0;
+      @include box-shadow(0px -2px 3px rgba(0, 0, 0, 0.08));
+    }
+
+    .language-box {
+      &__list {
+        display: block;
+      }
+
+      ul {
+        display: flex;
+      }
+
+      &__item {
+        flex: 1;
+        margin: 0 2.5%;
+        @include border-radius(4px !important);
+      }
+    }
+  }
+}
